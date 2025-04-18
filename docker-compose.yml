@@ -54,6 +54,25 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
+
+  payment:
+    build:
+      context: .
+      dockerfile: ./apps/payment/Dockerfile
+      target: development
+    command: npm run start:dev payment
+    env_file:
+      - ./apps/payment/.env
+    depends_on:
+      - mongodb-primary
+      - mongodb-secondary
+      - mongodb-arbiter
+      - rabbitmq
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+
+
   rabbitmq:
     image: rabbitmq:3-management
     ports:
